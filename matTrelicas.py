@@ -146,19 +146,22 @@ def calcU(pg,idxs,matrix):
         for j in range(0,ixnbs):
             endMatrix[i][j] = matrix[idxs[i]][idxs[j]]
 
-    endMatrix = np.matrix(endMatrix)
-    endMatrix2 = np.linalg.pinv(endMatrix)
-        
-
+    uJacobs,erro = jacobi(500,0.0001,endMatrix,endPg)
     
-    u = endMatrix2 * endPg
+    #endMatrix = np.matrix(endMatrix)
+    
+    #endMatrix2 = np.linalg.pinv(endMatrix)
+    
+    
+    #u = endMatrix2 * endPg
     endU = np.zeros((len(pg),1))
     
     for val in range(0,ixnbs):
-        endU[idxs[val]] = u[val]
+        endU[idxs[val]] = uJacobs[val]
     
+
     pfinal = matrix * np.matrix((endU)) 
-    
+
     #deformação
     for ele in range(0,len(elements)):
         u1 = endU[elements[ele][0][0]*2]
@@ -194,7 +197,7 @@ def calcU(pg,idxs,matrix):
             if(restrict[0]*2+restrict[1]==i):
                 a = 1
         if(a==1):
-            reaction_forces.append(pfinal[i][0])
+            reaction_forces.append([pfinal[i][0],i%2])
 
     return endU,reaction_forces, deformations, tensions
 
@@ -211,8 +214,6 @@ def calcFinal():
 
 def jacobi(ite,tol,K,F):
     x = np.zeros((len(K),1))
-    #for iki in range(len(K)):
-     #   x[iki][0]=(F[iki][0]+K[iki][iki])
     x1 = np.zeros((len(K),1))
     for interacoes in range(0,ite):
         soma = np.dot(K,x)
@@ -222,25 +223,19 @@ def jacobi(ite,tol,K,F):
         deltaIdx = 0
 
         for lines in range(0,len(K)):
-            x1[lines] = (F[lines] -K[lines][lines-2]*x[lines-2] - K[lines][lines-1]*x[lines-1])/K[lines][lines]
-            print(x1[lines]-x[lines])
+            x1[lines] = (F[lines] - (soma[lines]-(x[lines]*K[lines][lines]) ) )/K[lines][lines]
             if(deltaEXTERNO < (x1[lines]-x[lines])):
                 deltaIdx = lines
                 deltaEXTERNO = (x1[lines]-x[lines])
-                print(deltaEXTERNO)
         
         erroMax = np.abs((x1[lines]-x[lines])/x1[lines])
         for ksk in range(0,len(x)):
             x[ksk] = x1[ksk]
-        print(x1)
         if (erroMax<=tol):
             print("Interações: ",interacoes)
             print("Erro max = ",erroMax)
-            return x
-
-
-    print("oi")
-    return x 
+            return x,erroMax
+    return x,erroMax
 
 
 
@@ -254,7 +249,7 @@ def printAndPlot(displacement,reaction,deformations,stress):
     print("-------------------------------------")
     for j in range(0,len(reaction)):
         print("Reação de apoio no nó ",j+1," [N]")
-        print(float(reaction[j][0]))
+        print(float(reaction[j][0]),int(reaction[j][1]))
     print("-------------------------------------")
     print("Tensão em cada elemento [Pa]")
     for ji in range(0,len(stress)):

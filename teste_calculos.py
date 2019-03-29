@@ -23,8 +23,7 @@ def teste1():
 
     
     displacement,reaction,deformations,stress = mt.calcFinal()
-    #mt.printAndPlot(displacement,reaction,deformations,stress)
-    print(displacement)
+    mt.printAndPlot(displacement,reaction,deformations,stress)
 
 
     
@@ -184,4 +183,4 @@ def teste5():
     
 
     
-teste2()
+teste1()
