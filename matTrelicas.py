@@ -195,7 +195,7 @@ def calcU(pg,idxs,matrix):
                 a = 1
         if(a==1):
             reaction_forces.append(pfinal[i][0])
-            
+
     return endU,reaction_forces, deformations, tensions
 
 def calcFinal():
@@ -210,18 +210,41 @@ def calcFinal():
 
 
 def jacobi(ite,tol,K,F):
-    x = np.array([[0],[0],[0]])
-    x1 = np.zeros((len(K[0]),1))
+    x = np.zeros((len(K),1))
+    #for iki in range(len(K)):
+     #   x[iki][0]=(F[iki][0]+K[iki][iki])
+    x1 = np.zeros((len(K),1))
     for interacoes in range(0,ite):
+        soma = np.dot(K,x)
         erroMax = 0
-        soma = np.dot(K,F)
+        
         deltaEXTERNO = 0
         deltaIdx = 0
-        for linha in range(0,len(K)):
 
-            x[linha][0] = (F[linha]-(soma[linha]-(K[linha][linha]*x[linha][0])))/K[linha][linha]
+        for lines in range(0,len(K)):
+            x1[lines] = (F[lines] -K[lines][lines-2]*x[lines-2] - K[lines][lines-1]*x[lines-1])/K[lines][lines]
+            print(x1[lines]-x[lines])
+            if(deltaEXTERNO < (x1[lines]-x[lines])):
+                deltaIdx = lines
+                deltaEXTERNO = (x1[lines]-x[lines])
+                print(deltaEXTERNO)
+        
+        erroMax = np.abs((x1[lines]-x[lines])/x1[lines])
+        for ksk in range(0,len(x)):
+            x[ksk] = x1[ksk]
+        print(x1)
+        if (erroMax<=tol):
+            print("Interações: ",interacoes)
+            print("Erro max = ",erroMax)
+            return x
 
+
+    print("oi")
     return x 
+
+
+
+
 
 def printAndPlot(displacement,reaction,deformations,stress):
     print("-------------------------------------")
@@ -229,14 +252,14 @@ def printAndPlot(displacement,reaction,deformations,stress):
     for i in range(0,len(nodes)):
         print(i+1,float(displacement[i*2][0]),float(displacement[i*2+1][0]))
     print("-------------------------------------")
-    for j in range(0,len(nodes)):
+    for j in range(0,len(reaction)):
         print("Reação de apoio no nó ",j+1," [N]")
         print(float(reaction[j][0]))
     print("-------------------------------------")
     print("Tensão em cada elemento [Pa]")
     for ji in range(0,len(stress)):
-        print(float(stress[ji][0]))
+        print(ji+1,float(stress[ji][0]))
     print("-------------------------------------")
     print("Deformação longitudinal específica de cada elemento")
     for ij in range(0,len(deformations)):
-        print(float(deformations[ij][0]))
+        print(ij+1,float(deformations[ij][0]))
