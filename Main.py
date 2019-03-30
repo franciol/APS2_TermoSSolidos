@@ -10,7 +10,7 @@ def main():
     for i in range(len(coordernadas)):
         #print(int(coordernadas[i][0]))
         #print(int(coordernadas[i][1]))
-        mt.newNode(int(coordernadas[i][0]), int(coordernadas[i][1]))
+        mt.newNode(coordernadas[i][0], coordernadas[i][1])
     
     for i in range(len(indices)):
         #print(int(indices[i][1]-1))
