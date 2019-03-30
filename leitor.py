@@ -1,6 +1,6 @@
 #def da funcao
 def entradas():
-    filename="entrada.fem"
+    filename=input("nome do arquivo: ")
     file=open(filename,"r+")
     linhas=file.readlines()
     arquivo=file.read()
@@ -93,5 +93,19 @@ def entradas():
     return cord,ele,inc,mat,geo,bcn,loads
 
 #teste da funcao
-#a,b,c,d,e,f,g=entradas()
-#print(g)
+"""a,b,c,d,e,f,g=entradas()
+#print(f)
+print("A--------------")
+print(a)
+print("B--------------")
+print(b)
+print("C--------------")
+print(c)
+print("D--------------")
+print(d)
+print("E--------------")
+print(e)
+print("F--------------")
+print(f)
+print("G--------------")
+print(g)"""
