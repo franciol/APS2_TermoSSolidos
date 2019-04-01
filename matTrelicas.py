@@ -134,7 +134,7 @@ def globalVectorForces():
 
     return pgzao,listIdx
                 
-def calcU(pg,idxs,matrix):
+def calcU(pg,idxs,matrix,numbOrNot):
     arrayCoordenates = 2*len(nodes)
     ixnbs = len(idxs)
     endMatrix = np.zeros((ixnbs,ixnbs))
@@ -146,20 +146,21 @@ def calcU(pg,idxs,matrix):
         for j in range(0,ixnbs):
             endMatrix[i][j] = matrix[idxs[i]][idxs[j]]
 
-    uJacobs,erro = jacobi(500,0.0001,endMatrix,endPg)
+    uJacobs,erro = jacobi(1000,0.01,endMatrix,endPg)
     
-    #endMatrix = np.matrix(endMatrix)
+    endMatrix = np.matrix(endMatrix)
+    endMatrix2 = np.linalg.pinv(endMatrix)
     
-    #endMatrix2 = np.linalg.pinv(endMatrix)
     
-    
-    #u = endMatrix2 * endPg
+    u = endMatrix2 * endPg
     endU = np.zeros((len(pg),1))
-    
-    for val in range(0,ixnbs):
-        endU[idxs[val]] = uJacobs[val]
-    
 
+    if(numbOrNot == 1):
+        u = uJacobs
+
+    for val in range(0,ixnbs):
+        endU[idxs[val]] = u[val]
+    
     pfinal = matrix * np.matrix((endU)) 
 
     #deformação
@@ -201,19 +202,21 @@ def calcU(pg,idxs,matrix):
 
     return endU,reaction_forces, deformations, tensions
 
-def calcFinal():
+def calcFinal(numbOrNot):
     createKs()
 
     matrix = calcMainMatrix()
     pg,listIdx = globalVectorForces()   
 
 
-    return calcU(pg,listIdx,matrix)
+    return calcU(pg,listIdx,matrix,numbOrNot)
 
 
 
 def jacobi(ite,tol,K,F):
     x = np.zeros((len(K),1))
+    for alter in range(len(K)):
+        x[alter][0] = np.random.randint(0,1000)
     x1 = np.zeros((len(K),1))
     for interacoes in range(0,ite):
         soma = np.dot(K,x)
@@ -224,16 +227,16 @@ def jacobi(ite,tol,K,F):
 
         for lines in range(0,len(K)):
             x1[lines] = (F[lines] - (soma[lines]-(x[lines]*K[lines][lines]) ) )/K[lines][lines]
-            if(deltaEXTERNO < (x1[lines]-x[lines])):
+            if(deltaEXTERNO < np.abs(x1[lines]-x[lines])):
                 deltaIdx = lines
-                deltaEXTERNO = (x1[lines]-x[lines])
+                deltaEXTERNO = np.abs(x1[lines]-x[lines])
         
-        erroMax = np.abs((x1[lines]-x[lines])/x1[lines])
+        erroMax = np.abs((deltaEXTERNO)/x1[lines])
         for ksk in range(0,len(x)):
             x[ksk] = x1[ksk]
         if (erroMax<=tol):
             print("Interações: ",interacoes)
-            print("Erro max = ",erroMax)
+            print("Erro max = ",float(erroMax))
             return x,erroMax
     return x,erroMax
 

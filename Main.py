@@ -1,11 +1,13 @@
 import matTrelicas as mt
 import leitor
 import numpy as np
+import escritor
 
 
 def main():
 #   |    a      |    b      |    c   |   d    |    e     |    f  |  g  |
     coordernadas, elementos, indices, material, geometria, nodes, loads = leitor.entradas()
+    numbOrNot = input("Calculo numérico(1) ou teórico(0)? ")
 
     for i in range(len(coordernadas)):
         #print(int(coordernadas[i][0]))
@@ -36,8 +38,10 @@ def main():
         #print(int(loads[i][2]-1))
         mt.newLoad(int(loads[i][0]-1), int(loads[i][1]-1), int(loads[i][2]-1))
 
-    displacement,reaction,deformations,stress = mt.calcFinal()
-    mt.printAndPlot(displacement,reaction,deformations,stress)
+    displacement,reaction,deformations,stress = mt.calcFinal(numbOrNot)
+    #mt.printAndPlot(displacement,reaction,deformations,stress)
+
+    escritor.saidas(displacement,reaction,deformations,stress)
 
 
 main()

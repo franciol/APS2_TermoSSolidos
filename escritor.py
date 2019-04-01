@@ -15,10 +15,12 @@ def saidas(disp,rea,stra,stre):
         a=str(i+1) + " " + b + " " + str(rea[i][1]) + "\n"
         saida.write(a)
     saida.write("\n")
+    saida.write("*ELEMENT_STRAINS\n")
     for i in range(len(stra)):
         a=str(i+1) + " " + str(float(stra[i][0])) + "\n"
         saida.write(a)
     saida.write("\n")
+    saida.write("*ELEMENT_STRESSES\n")
     for i in range(len(stre)):
         a=str(i+1) + " " + str(float(stre[i][0])) + "\n"
         saida.write(a)
