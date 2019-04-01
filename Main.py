@@ -7,7 +7,7 @@ import escritor
 def main():
 #   |    a      |    b      |    c   |   d    |    e     |    f  |  g  |
     coordernadas, elementos, indices, material, geometria, nodes, loads = leitor.entradas()
-    numbOrNot = input("Calculo numérico(1) ou teórico(0)? ")
+    numbOrNot = input("Calculo numérico pelo método de Jacobi?  sim(1)  não(0) ")
 
     for i in range(len(coordernadas)):
         #print(int(coordernadas[i][0]))
@@ -40,6 +40,7 @@ def main():
 
     displacement,reaction,deformations,stress = mt.calcFinal(numbOrNot)
     #mt.printAndPlot(displacement,reaction,deformations,stress)
+    mt.redimencionamento()
 
     escritor.saidas(displacement,reaction,deformations,stress)
 

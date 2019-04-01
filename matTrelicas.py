@@ -146,17 +146,16 @@ def calcU(pg,idxs,matrix,numbOrNot):
         for j in range(0,ixnbs):
             endMatrix[i][j] = matrix[idxs[i]][idxs[j]]
 
-    uJacobs,erro = jacobi(1000,0.01,endMatrix,endPg)
-    
-    endMatrix = np.matrix(endMatrix)
-    endMatrix2 = np.linalg.pinv(endMatrix)
-    
-    
-    u = endMatrix2 * endPg
     endU = np.zeros((len(pg),1))
 
     if(numbOrNot == 1):
+        uJacobs,erro = jacobi(1000,0.01,endMatrix,endPg)
         u = uJacobs
+    else:
+        endMatrix = np.matrix(endMatrix)
+        endMatrix2 = np.linalg.pinv(endMatrix)
+        u = endMatrix2 * endPg
+    
 
     for val in range(0,ixnbs):
         endU[idxs[val]] = u[val]
@@ -241,7 +240,14 @@ def jacobi(ite,tol,K,F):
     return x,erroMax
 
 
-
+def redimencionamento():
+    valorPaMax = float(input("max Pa para as barras: "))
+    for i in range(len(tensions)):
+        actual = np.abs(float(tensions[i][0]))
+        if (actual > valorPaMax):
+            newRed = (actual*elements[i][2])/valorPaMax
+            print("Para o elemento de id ",i+1," a área transversal da barra deveria redimencionar para ",newRed," m^2")
+            
 
 
 def printAndPlot(displacement,reaction,deformations,stress):

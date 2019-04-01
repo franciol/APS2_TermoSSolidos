@@ -29,23 +29,23 @@ def teste1():
     
 def teste2():
     mt.newNode(0,0)
-    mt.newNode(0,21)
-    mt.newNode(21,0)
-    mt.newNode(21,21)
+    mt.newNode(0,0.21)
+    mt.newNode(0.21,0)
+    mt.newNode(0.21,0.21)
 
-    mt.newElement(0,1,1)
-    mt.newElement(0,2,1)
-    mt.newElement(2,3,1)
-    mt.newElement(1,3,1)
-    mt.newElement(1,2,2**(1/2))
-    mt.newElement(0,3,2**(1/2))
+    mt.newElement(0,1,0.0001)
+    mt.newElement(0,2,0.0001)
+    mt.newElement(2,3,0.0001)
+    mt.newElement(1,3,0.0001)
+    mt.newElement(1,2,0.0001414214)
+    mt.newElement(0,3,0.0001414214)
 
-    mt.newMaterial(2e11,1570e6,1570e6)
-    mt.newMaterial(2e11,1570e6,1570e6)
-    mt.newMaterial(2e11,1570e6,1570e6)
-    mt.newMaterial(2e11,1570e6,1570e6)
-    mt.newMaterial(2e11,1570e6,1570e6)
-    mt.newMaterial(2e11,1570e6,1570e6)
+    mt.newMaterial(2e11,1570e9,1570e9)
+    mt.newMaterial(2e11,1570e9,1570e9)
+    mt.newMaterial(2e11,1570e9,1570e9)
+    mt.newMaterial(2e11,1570e9,1570e9)
+    mt.newMaterial(2e11,1570e9,1570e9)
+    mt.newMaterial(2e11,1570e9,1570e9)
 
     mt.newLoad(3,1,-9806)
 
@@ -56,8 +56,9 @@ def teste2():
     
     
 
-    displacement,reaction,deformations,stress = mt.calcFinal()
+    displacement,reaction,deformations,stress = mt.calcFinal(0)
     mt.printAndPlot(displacement,reaction,deformations,stress)
+    mt.redimencionamento()
 
 
 def teste3():
@@ -72,7 +73,7 @@ def teste3():
 
     mt.newLoad(1,0,50e3)
 
-    displacement,reaction,deformations,stress = mt.calcFinal()
+    displacement,reaction,deformations,stress = mt.calcFinal(0)
     mt.printAndPlot(displacement,reaction,deformations,stress)
 
 def teste4():
@@ -183,4 +184,4 @@ def teste5():
     
 
     
-teste5()
+teste2()
