@@ -37,11 +37,32 @@ def main():
         #print(int(loads[i][1]-1))
         #print(int(loads[i][2]-1))
         mt.newLoad(int(loads[i][0]-1), int(loads[i][1]-1), int(loads[i][2]-1))
-
     displacement,reaction,deformations,stress = mt.calcFinal(numbOrNot)
-    #mt.printAndPlot(displacement,reaction,deformations,stress)
-
     escritor.saidas(displacement,reaction,deformations,stress)
 
+    tensAd = float(input("Tensão Admissível: "))
+    isOk,red = mt.redimencionamento(tensAd)
+    
+    try:
+        if(not isOk):    
+            for maxInt in range(800):
+                displacement2,reaction2,deformations2,stress2 = mt.calcFinal(numbOrNot)
+                isOk,red = mt.redimencionamento(tensAd)
+                if(isOk):
+                    print("isOK")
+                    break
+            
+        if(not isOk):
+            print("Não foi possivel recalcular as áreas de forma completa")
+
+    finally:
+        if(isOk):
+            for reds in range(len(red)):
+                if red[reds] != 0:
+                    print("Para o elemento de id ",reds+1," a área transversal da barra deveria redimencionar para ",red[reds]," m^2")
+        
+    #mt.printAndPlot(displacement,reaction,deformations,stress)
+
+    
 
 main()
