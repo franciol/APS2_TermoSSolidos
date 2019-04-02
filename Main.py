@@ -40,7 +40,6 @@ def main():
 
     displacement,reaction,deformations,stress = mt.calcFinal(numbOrNot)
     #mt.printAndPlot(displacement,reaction,deformations,stress)
-    mt.redimencionamento()
 
     escritor.saidas(displacement,reaction,deformations,stress)
 

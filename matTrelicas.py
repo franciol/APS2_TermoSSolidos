@@ -206,9 +206,9 @@ def calcFinal(numbOrNot):
 
     matrix = calcMainMatrix()
     pg,listIdx = globalVectorForces()   
-
-
-    return calcU(pg,listIdx,matrix,numbOrNot)
+    disp,rea,stra,stre = calcU(pg,listIdx,matrix,numbOrNot)
+    redimencionamento()
+    return disp,rea,stra,stre
 
 
 
@@ -241,13 +241,13 @@ def jacobi(ite,tol,K,F):
 
 
 def redimencionamento():
-    valorPaMax = float(input("max Pa para as barras: "))
+    tensAd = float(input("Tensão Admissível: "))
     for i in range(len(tensions)):
         actual = np.abs(float(tensions[i][0]))
-        if (actual > valorPaMax):
-            newRed = (actual*elements[i][2])/valorPaMax
+        if (actual > tensAd):
+            newRed = (actual*elements[i][2])/tensAd
             print("Para o elemento de id ",i+1," a área transversal da barra deveria redimencionar para ",newRed," m^2")
-            
+        
 
 
 def printAndPlot(displacement,reaction,deformations,stress):

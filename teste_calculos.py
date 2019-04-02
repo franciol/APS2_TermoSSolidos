@@ -22,7 +22,7 @@ def teste1():
     mt.newLoad(2,1,-100)
 
     
-    displacement,reaction,deformations,stress = mt.calcFinal()
+    displacement,reaction,deformations,stress = mt.calcFinal(0)
     mt.printAndPlot(displacement,reaction,deformations,stress)
 
 
@@ -56,9 +56,8 @@ def teste2():
     
     
 
-    displacement,reaction,deformations,stress = mt.calcFinal(0)
+    displacement,reaction,deformations,stress = mt.calcFinal(1)
     mt.printAndPlot(displacement,reaction,deformations,stress)
-    mt.redimencionamento()
 
 
 def teste3():
@@ -179,7 +178,7 @@ def teste5():
     mt.newLoad(13,0,24000)
 
 
-    displacement,reaction,deformations,stress = mt.calcFinal()
+    displacement,reaction,deformations,stress = mt.calcFinal(1)
     mt.printAndPlot(displacement,reaction,deformations,stress)
     
 
